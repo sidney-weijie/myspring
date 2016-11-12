@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:c="http://www.springframework.org/schema/c"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <!-- 拦截器在withAop方法前运行安装到NameMatchMethodPointcutAdvisor中 -->
+   <bean id="aopMethodBeforeInterceptor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+   		<property name="advice">
+   			<bean class="com.sidney.spring.aop.MethodBeforeInterceptor"/>
+   		</property>
+   		<property name="mappedName" value="withAop"></property>
+   </bean>
+   
+   <!-- 拦截器在withAop()返回后运行 安装到NameMatchMethodPointcutAdvisor中 -->
+	<bean id="aopMethodAfterInterceptor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+   		<property name="advice">
+   			<bean class="com.sidney.spring.aop.MethodAfterInterceptor"/>
+   		</property>
+   		<property name="mappedName" value="withAop"></property>
+   </bean>
+   
+   <!-- 拦截器在异常抛出后运行 安装到NameMatchMethodPointcutAdvisor中 -->
+	<bean id="aopThrowsInterceptor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+   		<property name="advice">
+   			<bean class="com.sidney.spring.aop.ThrowInterceptor"/>
+   		</property>
+   		<property name="mappedName" value="withAop"></property>
+   </bean>
+	
+	<!-- service对象，安装到ProxyFactoryBean对象中 -->
+	<bean id="aopService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="interceptorNames">
+			<list>
+				<value>aopMethodBeforeInterceptor</value>
+				<value>aopMethodAfterInterceptor</value>
+				<value>aopThrowsInterceptor</value>
+			</list>
+		</property>
+		<property name="target">
+			<bean class="com.sidney.spring.aop.AopServiceImpl">
+				<property name="name" value="HelloSidney"></property>
+			</bean>
+		</property>
+	</bean>
+	
+</beans>
