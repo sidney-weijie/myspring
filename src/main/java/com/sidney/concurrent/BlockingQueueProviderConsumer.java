@@ -50,7 +50,6 @@ class Consumer1 implements Runnable {
         this.buffer = buffer;
     }
 
-    @Override
     public void run() {
         while(true) {
             try {
@@ -75,7 +74,6 @@ class Producer1 implements Runnable {
         this.buffer = buffer;
     }
 
-    @Override
     public void run() {
         while(true) {
             try {
@@ -94,7 +92,7 @@ class Producer1 implements Runnable {
 public class BlockingQueueProviderConsumer {
 
     public static void main(String[] args) {
-        BlockingQueue<Task1> buffer = new LinkedBlockingQueue<>(Constants1.MAX_BUFFER_SIZE);
+        BlockingQueue<Task1> buffer = new LinkedBlockingQueue<Task1>(Constants1.MAX_BUFFER_SIZE);
         ExecutorService es = Executors.newFixedThreadPool(Constants1.NUM_OF_CONSUMER + Constants1.NUM_OF_PRODUCER);
         for(int i = 1; i <= Constants1.NUM_OF_PRODUCER; ++i) {
             es.execute(new Producer1(buffer));

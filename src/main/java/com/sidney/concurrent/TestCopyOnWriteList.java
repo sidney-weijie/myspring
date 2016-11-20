@@ -22,7 +22,7 @@ public class TestCopyOnWriteList {
     private static final int THREAD_POOL_SIZE = 2;
 
     public static void main(String[] args) {
-        List<Double> list = new ArrayList<>();
+        List<Double> list = new ArrayList<Double>();
         /**
          * 运行本段代码可能会出现 Exception in thread "pool-1-thread-1" java.lang.ArrayIndexOutOfBoundsException: 9369错误
          * 将上面改为List<Double> list = new CopyOnWriteArrayList<>();即可避免这种情况产生

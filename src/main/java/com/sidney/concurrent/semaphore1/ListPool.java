@@ -17,7 +17,7 @@ public class ListPool {
 	public ListPool(){
 		super();
 		for(int i = 0 ;i < poolMaxSize;i++){
-			list.add("曾伟杰" + (i));
+			list.add("鏇句紵鏉� "+ (i));
 		}
 		
 	}

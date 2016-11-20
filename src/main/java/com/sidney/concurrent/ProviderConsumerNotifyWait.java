@@ -47,7 +47,6 @@ class Consumer implements Runnable {
         this.buffer = buffer;
     }
 
-    @Override
     public void run() {
         while(true) {
             synchronized(buffer) {
@@ -78,7 +77,6 @@ class Producer implements Runnable {
         this.buffer = buffer;
     }
 
-    @Override
     public void run() {
         while(true) {
             synchronized (buffer) {
@@ -102,7 +100,7 @@ class Producer implements Runnable {
 public class ProviderConsumerNotifyWait {
 
     public static void main(String[] args) {
-        List<Task> buffer = new ArrayList<>(Constants.MAX_BUFFER_SIZE);
+        List<Task> buffer = new ArrayList<Task>(Constants.MAX_BUFFER_SIZE);
         ExecutorService es = Executors.newFixedThreadPool(Constants.NUM_OF_CONSUMER + Constants.NUM_OF_PRODUCER);
         for(int i = 1; i <= Constants.NUM_OF_PRODUCER; ++i) {
             es.execute(new Producer(buffer));
