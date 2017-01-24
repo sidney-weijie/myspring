@@ -6,15 +6,15 @@ public class AopServiceImpl implements IAopService {
 	private String name;
 	public void withAop() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("ÓÐAOPº¯ÊýÔËÐÐ¡£name: " + name);
+		System.out.println("ï¿½ï¿½AOPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½name: " + name);
 		if ( name.trim().length() == 0 ){
-			throw new AccountException("name ÊôÐÔ²»ÄÜÎª¿Õ");
+			throw new AccountException("name ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½Îªï¿½ï¿½");
 		}
 	}
 
 	public void withOutAop() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("Ã»ÓÐAOPº¯ÊýÔËÐÐ");
+		System.out.println("withoutAoP");
 	}
 
 	public String getName() {

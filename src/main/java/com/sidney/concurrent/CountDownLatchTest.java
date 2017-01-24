@@ -1,17 +1,18 @@
+
 package com.sidney.concurrent;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * ¹¤ÈËÀà
- * @author Âæê»
+ * å·¥äººç±»
+ * @author éª†æ˜Š
  *
  */
 class Worker {
-    private String name;        // Ãû×Ö
-    private long workDuration;  // ¹¤×÷³ÖĞøÊ±¼ä
+    private String name;        // åå­—
+    private long workDuration;  // å·¥ä½œæŒç»­æ—¶é—´
 
     /**
-     * ¹¹ÔìÆ÷
+     * æ„é€ å™¨
      */
     public Worker(String name, long workDuration) {
         this.name = name;
@@ -19,12 +20,12 @@ class Worker {
     }
 
     /**
-     * Íê³É¹¤×÷
+     * å®Œæˆå·¥ä½œ
      */
     public void doWork() {
         System.out.println(name + " begins to work...");
         try {
-            Thread.sleep(workDuration); // ÓÃĞİÃßÄ£Äâ¹¤×÷Ö´ĞĞµÄÊ±¼ä
+            Thread.sleep(workDuration); // ç”¨ä¼‘çœ æ¨¡æ‹Ÿå·¥ä½œæ‰§è¡Œçš„æ—¶é—´
         } catch(InterruptedException ex) {
             ex.printStackTrace();
         }
@@ -33,8 +34,8 @@ class Worker {
 }
 
 /**
- * ²âÊÔÏß³Ì
- * @author Âæê»
+ * æµ‹è¯•çº¿ç¨‹
+ * @author éª†æ˜Š
  *
  */
 class WorkerTestThread implements Runnable {
@@ -47,31 +48,31 @@ class WorkerTestThread implements Runnable {
     }
 
     public void run() {
-        worker.doWork();        // ÈÃ¹¤ÈË¿ªÊ¼¹¤×÷
-        cdLatch.countDown();    // ¹¤×÷Íê³Éºóµ¹¼ÆÊ±´ÎÊı¼õ1
+        worker.doWork();        // è®©å·¥äººå¼€å§‹å·¥ä½œ
+        cdLatch.countDown();    // å·¥ä½œå®Œæˆåå€’è®¡æ—¶æ¬¡æ•°å‡1
     }
 }
 
 class CountDownLatchTest {
 
-    private static final int MAX_WORK_DURATION = 5000;  // ×î´ó¹¤×÷Ê±¼ä
-    private static final int MIN_WORK_DURATION = 1000;  // ×îĞ¡¹¤×÷Ê±¼ä
+    private static final int MAX_WORK_DURATION = 5000;  // æœ€å¤§å·¥ä½œæ—¶é—´
+    private static final int MIN_WORK_DURATION = 1000;  // æœ€å°å·¥ä½œæ—¶é—´
 
-    // ²úÉúËæ»úµÄ¹¤×÷Ê±¼ä
+    // äº§ç”Ÿéšæœºçš„å·¥ä½œæ—¶é—´
     private static long getRandomWorkDuration(long min, long max) {
         return (long) (Math.random() * (max - min) + min);
     }
 
     public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(2);   // ´´½¨µ¹¼ÆÊ±ãÅ²¢Ö¸¶¨µ¹¼ÆÊ±´ÎÊıÎª2
-        Worker w1 = new Worker("Âæê»", getRandomWorkDuration(MIN_WORK_DURATION, MAX_WORK_DURATION));
-        Worker w2 = new Worker("Íõ´ó´¸", getRandomWorkDuration(MIN_WORK_DURATION, MAX_WORK_DURATION));
+        CountDownLatch latch = new CountDownLatch(2);   // åˆ›å»ºå€’è®¡æ—¶é—©å¹¶æŒ‡å®šå€’è®¡æ—¶æ¬¡æ•°ä¸º2
+        Worker w1 = new Worker("éª†æ˜Š", getRandomWorkDuration(MIN_WORK_DURATION, MAX_WORK_DURATION));
+        Worker w2 = new Worker("ç‹å¤§é”¤", getRandomWorkDuration(MIN_WORK_DURATION, MAX_WORK_DURATION));
 
         new Thread(new WorkerTestThread(w1, latch)).start();
         new Thread(new WorkerTestThread(w2, latch)).start();
 
         try {
-            latch.await();  // µÈ´ıµ¹¼ÆÊ±ãÅ¼õµ½0
+            latch.await();  // ç­‰å¾…å€’è®¡æ—¶é—©å‡åˆ°0
             System.out.println("All jobs have been finished!");
         } catch (InterruptedException e) {
             e.printStackTrace();
