@@ -1,0 +1,41 @@
+def isExistAndEqual( a, b){
+	if( a != null && a.equals(b) ){
+		return true;
+	}
+	return false;
+};
+
+def forFunc1(a,repeat=10){
+    for(i in a .. repeat){
+        print(i+",");
+    }
+}
+
+def JSON verify(JSON jobj) { jobj.put("temp","abc");
+  return jobj;
+};
+
+def JSON custRegister(JSON jobj) { 
+	jobj.put("custRegister","abc");
+  	return jobj;
+};
+
+def JSON trade(JSON jobj) { 
+	def a = jobj.get("AAA");
+	def b = "1";
+	def value = isExistAndEqual(a,b);
+	
+	if( "true" == value ){
+		print "dsafas";
+	}
+	
+  	return jobj;
+};
+
+def isExistAndEqual(String a, String b){
+	if( a && a.equals(b) ){
+		return true;
+	}else{
+		return false;
+	}
+};
