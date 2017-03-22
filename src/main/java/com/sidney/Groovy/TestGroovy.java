@@ -6,9 +6,13 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Random;
+
+import org.junit.Assert;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.sidney.util.Helper;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
@@ -39,10 +43,7 @@ public class TestGroovy {
 		System.out.println(clazzObj.invokeMethod("test", "str"));*/
 		
 		
-		String code = "import com.alibaba.fastjson.JSON; "
-				+ "def JSON f(JSON jobj) { jobj.put(\"temp\",\"abc\");"
-				+ "    return jobj; "
-				+ "}";
+
 		String filename = "groovy.gy";
 		String scriptStr = new String();
 		try {
@@ -54,6 +55,7 @@ public class TestGroovy {
 			String line = "";
 			while((line=br.readLine())!=null){
 				buffer.append(line);
+				buffer.append('\n');
 			}
 			scriptStr = buffer.toString();
 			System.err.println(scriptStr);
@@ -68,16 +70,37 @@ public class TestGroovy {
 		
 		
 		
-		
+		Random random = new Random(System.currentTimeMillis());
 		JSONObject jobj = new JSONObject();
-		jobj.put("AAA", "1");
-		jobj.put("BBB", "2");
-		jobj.put("CCC", "3");
+		for(int i = 0 ;i < 100; i++ ){
+			
+			jobj.put(Helper.getRandomString(random.nextInt(200)%15 + 1), Helper.getRandomString(random.nextInt(200)%15 + 1));
+		}
+		
 		long start = System.currentTimeMillis();
 		
-		for(int i = 0; i < 1000000; i++){
-			jobj.put("abce"+i, i);
-			gc.invoke("verify", jobj);
+		for(int i = 0; i < 1; i++){
+			int a = random.nextInt(200)%2;
+			int b = random.nextInt(200)%2; 
+			int c = random.nextInt(200)%2;
+			jobj.put("aaa", ""+a);
+			jobj.put("bbb", ""+b);
+			jobj.put("ccc", ""+c);
+			
+			jobj.put("ddd", ""+a);
+			jobj.put("eee", ""+b);
+			jobj.put("fff", ""+c);
+			
+			jobj.put("xxx", ""+a);
+			jobj.put("yyy", ""+b);
+			jobj.put("zzz", ""+c);
+			
+			jobj = (JSONObject) gc.invoke("login", jobj);
+			
+			if(!("0" + (a*4 + b*2 + c)).equals(( jobj.get("AAA")))){
+				System.err.println("error");
+			}
+			//System.out.println(jobj.toJSONString());
 		}
 		
 		System.out.println("timeused="+(System.currentTimeMillis() - start));
