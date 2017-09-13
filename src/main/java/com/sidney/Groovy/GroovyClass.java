@@ -1,4 +1,6 @@
 package com.sidney.Groovy;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONObject;
 import com.mysql.jdbc.StringUtils;
 
@@ -7,6 +9,29 @@ import groovy.lang.GroovyObject;
 public class GroovyClass {
 	private Class aClass;
 	private GroovyObject groovyObject;
+	
+public Object invoke(String function,Map<String,Object> params){
+		
+		//System.err.println(groovyObject.getMetaClass().getMethods());
+		Object result = null;
+		try {	
+			if(groovyObject != null && groovyObject.getMetaClass().getMetaMethod(function,new Object[]{params}) != null){
+				result = groovyObject.invokeMethod(function, params);		
+			}else{
+				System.err.println("groovyObject or method is null");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(result == null){
+			return params;
+		}
+			
+		return result;
+	}
+	
+	
 	
 	
 	public Object invoke(String function,JSONObject params){

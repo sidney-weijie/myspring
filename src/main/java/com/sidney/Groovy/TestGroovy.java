@@ -6,9 +6,14 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -17,8 +22,87 @@ import com.sidney.util.Helper;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 
-public class TestGroovy {
+public class TestGroovy  {
 
+	@Test
+	public void testGroovyScript(){
+		String scriptStr = getScriptText();
+		GroovyClass  gc = new GroovyClass(scriptStr);
+		long start = System.currentTimeMillis();
+		
+		Map<String, String> cmccMap = new HashMap<String, String>();
+		Map<String, String> unicomMap = new HashMap<String, String>();
+		Map<String, String> telcomMap = new HashMap<String, String>();
+		cmccMap.put("0", "0");
+		cmccMap.put("1", "0");
+		cmccMap.put("2", "0");
+		cmccMap.put("3", "0");
+		cmccMap.put("4", "1");
+		cmccMap.put("5", "1");
+		cmccMap.put("6", "1");
+		cmccMap.put("7", "1");
+		cmccMap.put("8", "0");
+		cmccMap.put("9", "0");
+		
+		unicomMap.put("0", "0");
+		unicomMap.put("1", "0");
+		unicomMap.put("2", "0");
+		unicomMap.put("3", "1");
+		unicomMap.put("4", "1");
+		unicomMap.put("5", "1");
+		unicomMap.put("6", "1");
+		unicomMap.put("7", "1");
+		unicomMap.put("8", "0");
+		unicomMap.put("9", "0");
+		
+		telcomMap.put("0", "0");	
+		telcomMap.put("1", "0");	
+		telcomMap.put("2", "1");		
+		telcomMap.put("3", "1");
+		telcomMap.put("4", "1");
+		telcomMap.put("5", "1");
+		telcomMap.put("6", "1");
+		telcomMap.put("7", "1");
+		telcomMap.put("8", "1");
+		telcomMap.put("9", "0");	
+		
+		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		System.err.println(JSON.toJSONString(map));
+		map = (Map) gc.invoke("verify", map);
+		System.err.println(JSON.toJSONString(map));
+		Assert.assertEquals(null, map.get("cmccOnlineTime") );
+		Assert.assertEquals(null, map.get("unicomOnlineTime") );
+		Assert.assertEquals(null, map.get("telcomOnlineTime") );
+		
+		for(int i = 0;i<10;i++){
+			map.put("mobileInnetPeriodSjs", ""+i);
+			map.put("mobileNoInUseTimeLt", ""+i);
+			map.put("inTimeTc", ""+i);
+			System.err.println(JSON.toJSONString(map));
+			map = (Map) gc.invoke("verify", map);
+			System.err.println(JSON.toJSONString(map));
+			
+			System.out.println("i=" + i +"  cmccOnlineTime=" + map.get("cmccOnlineTime"));
+			System.out.println("i=" + i +"  unicomOnlineTime=" + map.get("unicomOnlineTime"));
+			System.out.println("i=" + i +"  telcomOnlineTime=" + map.get("telcomOnlineTime"));
+			Assert.assertEquals(cmccMap.get(""+i), map.get("cmccOnlineTime") );
+			Assert.assertEquals(unicomMap.get(""+i), map.get("unicomOnlineTime") );
+			Assert.assertEquals(telcomMap.get(""+i), map.get("telcomOnlineTime") );
+		}
+		
+		
+		
+		
+		
+		System.out.println("timeused="+(System.currentTimeMillis() - start));
+	}
+	
+	
+	
+	
+	
 	public static Object invoke(String code, String function, JSONObject params){
 		try {
 			
@@ -35,13 +119,7 @@ public class TestGroovy {
 	}
 	
 	public static void main(String []args) throws InstantiationException, IllegalAccessException{
-	/*	String script="";//groovy script
-		ClassLoader parent = ClassLoader.getSystemClassLoader();
-		GroovyClassLoader loader = new GroovyClassLoader(parent);
-		Class< ?> clazz = loader.parseClass(script);
-		GroovyObject clazzObj = (GroovyObject)clazz.newInstance();
-		System.out.println(clazzObj.invokeMethod("test", "str"));*/
-		
+	
 		
 
 		String filename = "groovy.gy";
@@ -70,46 +148,40 @@ public class TestGroovy {
 		
 		
 		
-		Random random = new Random(System.currentTimeMillis());
-		JSONObject jobj = new JSONObject();
-		for(int i = 0 ;i < 100; i++ ){
-			
-			jobj.put(Helper.getRandomString(random.nextInt(200)%15 + 1), Helper.getRandomString(random.nextInt(200)%15 + 1));
-		}
-		
-		long start = System.currentTimeMillis();
-		
-		for(int i = 0; i < 1; i++){
-			int a = random.nextInt(200)%2;
-			int b = random.nextInt(200)%2; 
-			int c = random.nextInt(200)%2;
-			jobj.put("aaa", ""+a);
-			jobj.put("bbb", ""+b);
-			jobj.put("ccc", ""+c);
-			
-			jobj.put("ddd", ""+a);
-			jobj.put("eee", ""+b);
-			jobj.put("fff", ""+c);
-			
-			jobj.put("xxx", ""+a);
-			jobj.put("yyy", ""+b);
-			jobj.put("zzz", ""+c);
-			
-			jobj = (JSONObject) gc.invoke("login", jobj);
-			
-			if(!("0" + (a*4 + b*2 + c)).equals(( jobj.get("AAA")))){
-				System.err.println("error");
-			}
-			//System.out.println(jobj.toJSONString());
-		}
-		
-		System.out.println("timeused="+(System.currentTimeMillis() - start));
-		//System.err.println(JSON.toJSONString(jobj));
+
+	
 		
 		
 		
 	}
 	
+
+	
+	
+	public static String getScriptText(){
+		String filename = "groovy.gy";
+		String scriptStr = new String();
+		try {
+			
+			File file = getFile(filename);
+			InputStream in = new FileInputStream(file);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			StringBuffer buffer = new StringBuffer();
+			String line = "";
+			while((line=br.readLine())!=null){
+				buffer.append(line);
+				buffer.append('\n');
+			}
+			scriptStr = buffer.toString();
+			System.err.println(scriptStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+
+		}
+		
+		return scriptStr;
+	}
 	
 	  private static File getFile(String fileName) {
 	        ClassLoader classLoader = TestGroovy.class.getClassLoader();
